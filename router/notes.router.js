@@ -81,9 +81,7 @@ router.post('/', (req, res, next)=> {
 
 router.delete('/:id', (req, res, next)=> {
   let {id} = req.params;
-  id = Number(id);
-  if(!id) return next();
-  notes.delete(id, (err, item)=>{
+  notes.delete(id, (err)=>{
     if(err) return next(err);
     res.status(204).end();
   });
