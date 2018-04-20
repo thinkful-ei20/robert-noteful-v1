@@ -106,4 +106,30 @@ describe('Notes route', function () {
       });
   });
 
+  it('POST with no title should return error 400', () => {
+    const newNote = {
+      content: 'this is a test sentence',
+    };
+    return chai.request(app)
+      .post('/api/notes')
+      .send(newNote)
+      .then(res => {
+        expect(res).to.have.status(400);
+      });
+  });
+
+  it('DELETE should return 204', () => {
+    let id;
+    return chai.request(app)
+      .get('/api/notes')
+      .then(res => {
+        id = res.body[0].id;
+        return chai.request(app)
+          .delete(`/api/notes/${id}`);
+      })
+      .then(res => {
+        expect(res).to.have.status(204);
+      });
+  });
+
 });
