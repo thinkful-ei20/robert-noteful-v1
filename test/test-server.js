@@ -59,5 +59,51 @@ describe('Notes route', function () {
           });
       });  
   });
-  
+
+  it('PUT should update note information if given a valid id', () => {
+    const updateObj = {
+      title: 'testy test',
+      content: 'this is a test senctence',
+    };
+    return chai.request(app)
+      .get('/api/notes')
+      .then(res => {
+        updateObj.id = res.body[0].id;
+        return chai.request(app)
+          .put(`/api/notes/${updateObj.id}`)
+          .send(updateObj);
+      })
+      .then(res => {
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.deep.equal(updateObj);
+      });  
+  });
+
+  it('PUT should return 404 if given an invalid id', () => {
+    return chai.request(app)
+      .put('/api/notes/notanid')
+      .then(res => {
+        expect(res).to.have.status(404);
+      });
+  });
+
+  it('POST should return a new note', () => {
+    const newNote = {
+      title: 'testy test',
+      content: 'this is a test senctence',
+    };
+    return chai.request(app)
+      .post('/api/notes')
+      .send(newNote)
+      .then(res => {
+        expect(res).to.have.status(201);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('id', 'title', 'content');
+        expect(res.body).to.not.equal(null);
+        expect(res.body).deep.equal(Object.assign(newNote, {id: res.body.id}));
+      });
+  });
+
 });
