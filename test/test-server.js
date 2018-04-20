@@ -57,8 +57,7 @@ describe('Notes route', function () {
             expect(res.body).to.be.a('object');
             expect(res.body).to.include.keys('id', 'title', 'content');
           });
-      });
-      
+      });  
   });
   
 });
